@@ -1,16 +1,15 @@
+import { useRouter } from 'next/router';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import apis from '../../apis';
+import type { SignUpRequest } from '../../types';
 
 type SignUpProps = {
   closeSignUp: () => void;
 };
 
-type SignUpFormData = {
-  email: string;
-  password: string;
-};
-
 const SignUp = ({ closeSignUp }: SignUpProps) => {
-  const [signUpFormData, setSignUpFormData] = useState<SignUpFormData>({
+  const router = useRouter();
+  const [signUpFormData, setSignUpFormData] = useState<SignUpRequest>({
     email: '',
     password: '',
   });
@@ -22,9 +21,21 @@ const SignUp = ({ closeSignUp }: SignUpProps) => {
     setSignUpFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmitSignUpFormData: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmitSignUpFormData: FormEventHandler<HTMLFormElement> = async (
+    e,
+  ) => {
     e.preventDefault();
-    console.log(signUpFormData);
+    const {
+      data: { token },
+    } = await apis.auth.signUp(signUpFormData);
+    localStorage.setItem('token', token);
+    router.push('/');
+  };
+
+  const isValidSignUpFormData = () => {
+    const { email, password } = signUpFormData;
+    const emailRegex = /@*\./;
+    return emailRegex.test(email) && password.length >= 8;
   };
 
   return (
@@ -38,7 +49,9 @@ const SignUp = ({ closeSignUp }: SignUpProps) => {
         id='password'
         onChange={handleChangeSignUpFormData}
       />
-      <button type='submit'>Submit</button>
+      <button type='submit' disabled={!isValidSignUpFormData()}>
+        Submit
+      </button>
       <button type='button' onClick={closeSignUp}>
         Login
       </button>

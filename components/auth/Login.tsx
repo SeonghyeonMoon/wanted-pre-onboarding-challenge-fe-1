@@ -1,16 +1,15 @@
+import { useRouter } from 'next/router';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import apis from '../../apis';
+import type { LoginRequest } from '../../types';
 
 type LoginProps = {
   openSignUp: () => void;
 };
 
-type LoginFormData = {
-  email: string;
-  password: string;
-};
-
 const Login = ({ openSignUp }: LoginProps) => {
-  const [loginFormData, setLoginFormData] = useState<LoginFormData>({
+  const router = useRouter();
+  const [loginFormData, setLoginFormData] = useState<LoginRequest>({
     email: '',
     password: '',
   });
@@ -22,9 +21,15 @@ const Login = ({ openSignUp }: LoginProps) => {
     setLoginFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmitLoginFormData: FormEventHandler<HTMLFormElement> = (e) => {
+  const handleSubmitLoginFormData: FormEventHandler<HTMLFormElement> = async (
+    e,
+  ) => {
     e.preventDefault();
-    console.log(loginFormData);
+    const {
+      data: { token },
+    } = await apis.auth.login(loginFormData);
+    localStorage.setItem('token', token);
+    router.push('/');
   };
 
   const isValidLoginFormData = () => {
