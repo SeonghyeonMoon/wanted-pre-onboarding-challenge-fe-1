@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apis from '../../apis';
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Update } from './index';
 
 type ItemProps = {
   id: string;
@@ -14,6 +15,7 @@ type ItemProps = {
 const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const { mutate: deleteTodo } = useMutation(
     () => apis.todos.deleteTodo(id).then((res) => res.data.data),
@@ -28,40 +30,8 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
     deleteTodo();
   };
 
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [updateTodoFormData, setUpdateTodoFormData] = useState({
-    title,
-    content,
-  });
-
-  const { mutate: updateTodo } = useMutation(
-    () =>
-      apis.todos
-        .updateTodo(id, updateTodoFormData)
-        .then((res) => res.data.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['todos']);
-      },
-    },
-  );
-
-  const handleSubmitUpdateForm: FormEventHandler<HTMLFormElement> = async (
-    e,
-  ) => {
-    e.preventDefault();
-    updateTodo();
+  const endUpdate = () => {
     setIsUpdating(false);
-  };
-
-  const handleChangeUpdateForm: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const { id, value } = e.target;
-    setUpdateTodoFormData((prev) => ({ ...prev, [id]: value }));
-  };
-
-  const isValidUpdateTodoFormData = () => {
-    const { title, content } = updateTodoFormData;
-    return title && content;
   };
 
   const handleClickItem = () => {
@@ -70,34 +40,7 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
 
   if (isUpdating) {
     return (
-      <form onSubmit={handleSubmitUpdateForm}>
-        <label htmlFor='title'>Title</label>
-        <input
-          type='text'
-          id='title'
-          value={updateTodoFormData.title}
-          onChange={handleChangeUpdateForm}
-        />
-        <label htmlFor='content'>Content</label>
-        <input
-          type='text'
-          id='content'
-          value={updateTodoFormData.content}
-          onChange={handleChangeUpdateForm}
-        />
-        <button type='submit' disabled={!isValidUpdateTodoFormData()}>
-          Submit
-        </button>
-        <button
-          type='button'
-          onClick={() => {
-            setUpdateTodoFormData({ title, content });
-            setIsUpdating(false);
-          }}
-        >
-          Cancel
-        </button>
-      </form>
+      <Update id={id} title={title} content={content} endUpdate={endUpdate} />
     );
   }
 
