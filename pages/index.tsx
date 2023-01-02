@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { instance } from '../apis';
-import { List } from '../components/todo';
+import { CreateForm, List } from '../components/todo';
 
 const Todo = () => {
   const router = useRouter();
@@ -25,6 +25,8 @@ const Todo = () => {
       <button type='button' onClick={logout}>
         로그아웃
       </button>
+      <CreateForm />
+      <List />
     </>
   );
 };
