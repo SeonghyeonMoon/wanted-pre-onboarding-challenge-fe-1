@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apis from '../../apis';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import { useRouter } from 'next/router';
 
 type ItemProps = {
   id: string;
@@ -11,6 +12,7 @@ type ItemProps = {
 };
 
 const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const { mutate: deleteTodo } = useMutation(
@@ -62,6 +64,10 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
     return title && content;
   };
 
+  const handleClickItem = () => {
+    router.push(`?id=${id}`);
+  };
+
   if (isUpdating) {
     return (
       <form onSubmit={handleSubmitUpdateForm}>
@@ -96,7 +102,7 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
   }
 
   return (
-    <li>
+    <li onClick={handleClickItem}>
       <p>Title: {title}</p>
       <p>Content: {content}</p>
       <p>Created At: {createdAt}</p>

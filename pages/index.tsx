@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { instance } from '../apis';
-import { CreateForm, List } from '../components/todo';
+import { CreateForm, Detail, List } from '../components/todo';
 
 const Todo = () => {
   const router = useRouter();
@@ -20,6 +20,10 @@ const Todo = () => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(router.query.id);
+  }, [router.query.id]);
+
   return (
     <>
       <button type='button' onClick={logout}>
@@ -27,6 +31,7 @@ const Todo = () => {
       </button>
       <CreateForm />
       <List />
+      <Detail />
     </>
   );
 };
