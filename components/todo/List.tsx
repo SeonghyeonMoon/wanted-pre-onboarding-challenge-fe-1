@@ -1,13 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import apis from '../../apis';
+import Item from './Item';
 
 type ListProps = {};
 
 const List = ({}: ListProps) => {
   const [isToken, setIsToken] = useState(false);
 
-  const { data } = useQuery(
+  const { data: todoListData } = useQuery(
     ['todos'],
     () => apis.todos.getTodos().then((res) => res.data.data),
     {
@@ -22,13 +23,8 @@ const List = ({}: ListProps) => {
 
   return (
     <ul>
-      {data?.map(({ id, title, content, createdAt, updatedAt }) => (
-        <li key={id}>
-          <p>Title: {title}</p>
-          <p>Content: {content}</p>
-          <p>Created At: {createdAt}</p>
-          <p>Updated At: {updatedAt}</p>
-        </li>
+      {todoListData?.map((todoData) => (
+        <Item key={todoData.id} {...todoData} />
       ))}
     </ul>
   );
