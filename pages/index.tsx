@@ -6,11 +6,6 @@ import { CreateForm, Detail, List } from '../components/todo';
 const Todo = () => {
   const router = useRouter();
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    router.push('/auth');
-  };
-
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -20,9 +15,10 @@ const Todo = () => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(router.query.id);
-  }, [router.query.id]);
+  const logout = () => {
+    localStorage.removeItem('token');
+    router.push('/auth');
+  };
 
   return (
     <>
