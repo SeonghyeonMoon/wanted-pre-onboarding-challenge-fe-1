@@ -11,7 +11,7 @@ import type {
 
 const baseURL = 'http://localhost:8080';
 
-const instance = axios.create({ baseURL });
+export const instance = axios.create({ baseURL });
 
 const login = (
   loginRequest: LoginRequest,
@@ -23,21 +23,21 @@ const signUp = (
 ): Promise<AxiosResponse<SignUpResponse>> =>
   instance.post('/users/create', signUpRequest);
 
-const getTodos = (): Promise<AxiosResponse<TodoData[]>> =>
+const getTodos = (): Promise<AxiosResponse<{ data: TodoData[] }>> =>
   instance.get('/todos');
 
-const getTodoById = (id: string): Promise<AxiosResponse<TodoData>> =>
+const getTodoById = (id: string): Promise<AxiosResponse<{ data: TodoData }>> =>
   instance.get(`/todos/${id}`);
 
 const createTodo = (
   createTodoRequest: CreateTodoRequest,
-): Promise<AxiosResponse<TodoData>> =>
+): Promise<AxiosResponse<{ data: TodoData }>> =>
   instance.post('/todos', createTodoRequest);
 
 const updateTodo = (
   id: string,
   updateTodoRequest: UpdateTodoRequest,
-): Promise<AxiosResponse<TodoData>> =>
+): Promise<AxiosResponse<{ data: TodoData }>> =>
   instance.put(`/todos/${id}`, updateTodoRequest);
 
 const deleteTodo = (id: string): Promise<AxiosResponse> =>
