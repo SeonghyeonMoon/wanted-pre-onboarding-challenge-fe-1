@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Login, SignUp } from '../components/auth';
+import { Login, SignUp } from '@/components/auth';
 
 const Auth = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);

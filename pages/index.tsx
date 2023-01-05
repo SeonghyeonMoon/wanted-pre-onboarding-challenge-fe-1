@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { instance } from '../apis';
-import { CreateForm, Detail, List } from '../components/todo';
+import { instance } from '@/apis';
+import { CreateForm, Detail, List } from '@/components/todo';
 
 const Todo = () => {
   const router = useRouter();

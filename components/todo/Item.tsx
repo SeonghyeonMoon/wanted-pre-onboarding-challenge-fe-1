@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import apis from '../../apis';
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Update } from './index';
+import { useState } from 'react';
+import apis from '@/apis';
+import Update from './Update';
 
 type ItemProps = {
   id: string;
@@ -17,14 +17,11 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const { mutate: deleteTodo } = useMutation(
-    () => apis.todos.deleteTodo(id).then((res) => res.data.data),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['todos']);
-      },
+  const { mutate: deleteTodo } = useMutation(() => apis.todos.deleteTodo(id).then((res) => res.data.data), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['todos']);
     },
-  );
+  });
 
   const handleClickDeleteButton = () => {
     deleteTodo();
@@ -39,9 +36,7 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
   };
 
   if (isUpdating) {
-    return (
-      <Update id={id} title={title} content={content} endUpdate={endUpdate} />
-    );
+    return <Update id={id} title={title} content={content} endUpdate={endUpdate} />;
   }
 
   return (

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import apis from '../../apis';
-import type { SignUpRequest } from '../../types';
+import apis from '@/apis';
+import type { SignUpRequest } from '@/types';
 
 type SignUpProps = {
   closeSignUp: () => void;
@@ -14,16 +14,12 @@ const SignUp = ({ closeSignUp }: SignUpProps) => {
     password: '',
   });
 
-  const handleChangeSignUpFormData: ChangeEventHandler<HTMLInputElement> = (
-    e,
-  ) => {
+  const handleChangeSignUpFormData: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
     setSignUpFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmitSignUpFormData: FormEventHandler<HTMLFormElement> = async (
-    e,
-  ) => {
+  const handleSubmitSignUpFormData: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const {
       data: { token },
@@ -44,11 +40,7 @@ const SignUp = ({ closeSignUp }: SignUpProps) => {
       <label htmlFor='email'>Email</label>
       <input type='email' id='email' onChange={handleChangeSignUpFormData} />
       <label htmlFor='password'>Password</label>
-      <input
-        type='password'
-        id='password'
-        onChange={handleChangeSignUpFormData}
-      />
+      <input type='password' id='password' onChange={handleChangeSignUpFormData} />
       <button type='submit' disabled={!isValidSignUpFormData()}>
         Submit
       </button>

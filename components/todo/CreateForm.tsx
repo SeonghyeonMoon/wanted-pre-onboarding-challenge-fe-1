@@ -1,6 +1,6 @@
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
-import apis from '../../apis';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import apis from '@/apis';
 
 const CreateForm = () => {
   const queryClient = useQueryClient();
@@ -10,8 +10,7 @@ const CreateForm = () => {
   });
 
   const { mutate: addTodo } = useMutation(
-    () =>
-      apis.todos.createTodo(createTodoFormData).then((res) => res.data.data),
+    () => apis.todos.createTodo(createTodoFormData).then((res) => res.data.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['todos']);
@@ -24,9 +23,7 @@ const CreateForm = () => {
     setCreateTodoFormData((prev) => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmitCreateForm: FormEventHandler<HTMLFormElement> = async (
-    e,
-  ) => {
+  const handleSubmitCreateForm: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     addTodo();
     setCreateTodoFormData({ title: '', content: '' });
@@ -40,19 +37,9 @@ const CreateForm = () => {
   return (
     <form onSubmit={handleSubmitCreateForm}>
       <label htmlFor='title'>Title</label>
-      <input
-        type='text'
-        id='title'
-        value={createTodoFormData.title}
-        onChange={handleChangeCreateForm}
-      />
+      <input type='text' id='title' value={createTodoFormData.title} onChange={handleChangeCreateForm} />
       <label htmlFor='content'>Content</label>
-      <input
-        type='text'
-        id='content'
-        value={createTodoFormData.content}
-        onChange={handleChangeCreateForm}
-      />
+      <input type='text' id='content' value={createTodoFormData.content} onChange={handleChangeCreateForm} />
       <button type='submit' disabled={!isValidCreateTodoFormData()}>
         Submit
       </button>

@@ -1,6 +1,6 @@
-import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import apis from '../../apis';
+import { ChangeEventHandler, FormEventHandler, useState } from 'react';
+import apis from '@/apis';
 
 type UpdateProps = {
   id: string;
@@ -17,10 +17,7 @@ const Update = ({ id, title, content, endUpdate }: UpdateProps) => {
   });
 
   const { mutate: updateTodo } = useMutation(
-    () =>
-      apis.todos
-        .updateTodo(id, updateTodoFormData)
-        .then((res) => res.data.data),
+    () => apis.todos.updateTodo(id, updateTodoFormData).then((res) => res.data.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['todos']);
@@ -28,9 +25,7 @@ const Update = ({ id, title, content, endUpdate }: UpdateProps) => {
     },
   );
 
-  const handleSubmitUpdateForm: FormEventHandler<HTMLFormElement> = async (
-    e,
-  ) => {
+  const handleSubmitUpdateForm: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     updateTodo();
     endUpdate();
@@ -49,19 +44,9 @@ const Update = ({ id, title, content, endUpdate }: UpdateProps) => {
   return (
     <form onSubmit={handleSubmitUpdateForm}>
       <label htmlFor='title'>Title</label>
-      <input
-        type='text'
-        id='title'
-        value={updateTodoFormData.title}
-        onChange={handleChangeUpdateForm}
-      />
+      <input type='text' id='title' value={updateTodoFormData.title} onChange={handleChangeUpdateForm} />
       <label htmlFor='content'>Content</label>
-      <input
-        type='text'
-        id='content'
-        value={updateTodoFormData.content}
-        onChange={handleChangeUpdateForm}
-      />
+      <input type='text' id='content' value={updateTodoFormData.content} onChange={handleChangeUpdateForm} />
       <button type='submit' disabled={!isValidUpdateTodoFormData()}>
         Submit
       </button>

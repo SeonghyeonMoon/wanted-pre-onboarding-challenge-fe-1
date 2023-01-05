@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
-import apis from '../../apis';
+import { useRouter } from 'next/router';
+import apis from '@/apis';
 
 const Detail = () => {
   const router = useRouter();
@@ -8,9 +8,7 @@ const Detail = () => {
   const { data } = useQuery(
     ['todos', router.query.id],
     () => {
-      return apis.todos
-        .getTodoById(router.query.id as string)
-        .then((res) => res.data.data);
+      return apis.todos.getTodoById(router.query.id as string).then((res) => res.data.data);
     },
     {
       enabled: !!router.query.id,
