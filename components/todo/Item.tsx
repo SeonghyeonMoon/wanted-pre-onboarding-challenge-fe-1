@@ -21,6 +21,9 @@ const Item = ({ id, title, content, createdAt, updatedAt }: ItemProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries(['todos']);
     },
+    onError: () => {
+      router.push('/auth');
+    },
   });
 
   const handleClickDeleteButton = () => {

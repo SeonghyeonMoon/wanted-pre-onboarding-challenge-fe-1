@@ -12,6 +12,9 @@ const Detail = () => {
     },
     {
       enabled: !!router.query.id,
+      onError: () => {
+        router.push('/auth');
+      },
     },
   );
 

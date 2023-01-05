@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import apis from '@/apis';
 
@@ -11,6 +12,7 @@ type UpdateProps = {
 
 const Update = ({ id, title, content, endUpdate }: UpdateProps) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [updateTodoFormData, setUpdateTodoFormData] = useState({
     title,
     content,
@@ -21,6 +23,9 @@ const Update = ({ id, title, content, endUpdate }: UpdateProps) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['todos']);
+      },
+      onError: () => {
+        router.push('/auth');
       },
     },
   );

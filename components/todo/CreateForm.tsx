@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import apis from '@/apis';
 
 const CreateForm = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const [createTodoFormData, setCreateTodoFormData] = useState({
     title: '',
     content: '',
@@ -14,6 +16,9 @@ const CreateForm = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['todos']);
+      },
+      onError: () => {
+        router.push('/auth');
       },
     },
   );
